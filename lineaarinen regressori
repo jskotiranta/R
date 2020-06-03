@@ -15,7 +15,7 @@ splitti = sample.split(dataset$xvar, SplitRatio = 0.8) #muuta tarvittaessa!
 treeniosa = subset(datasetti, splitti == TRUE)
 testiosa = subset(datasetti, splitti == FALSE)
 
-#yksinkertainen lineaarinen regressori
+#tosi yksinkertainen lineaarinen regressori
 regressori = lm(formula = yvar ~ xvar, data = treeniosa)
 summary(regressori)
 
@@ -27,8 +27,8 @@ library(ggplot2)
 
 #katsotaan miltä lopputulos näyttää ja kuinka ennuste sopii
 ggplot() +
-  geom_point(aes(x = treeniosa$xvar, y = treenisetti$yvar), colour = 'blue') +
-  geom_point(aes(x = testiosa$xvar, y = testisetti$yvar), colour = 'green') +
+  geom_point(aes(x = treeniosa$xvar, y = treeniosa$yvar), colour = 'blue') +
+  geom_point(aes(x = testiosa$xvar, y = testiosa$yvar), colour = 'green') +
   geom_line(aes(x = treeniosa$xvar, y = predict(regressori, uusi = treeniosa)), colour = 'red') +
   ggtitle('lineaarinen regressio') + 
   xlab('x var') +
