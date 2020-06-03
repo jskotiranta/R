@@ -1,0 +1,35 @@
+#Nämä ei kuulu R:n peruskokoonpanoon
+#caTools vaatii R 3.6.0 tai uudemman
+#install.packages('caTools')
+#install.packages('ggplot2')
+
+#luetaan datasetti tiedostosta
+#xvar on riippumaton ja yvar riippuva muuttuja
+datasetti = read.csv("data.csv")
+
+#datasetin splittaus treeniosioon ja testausosioon
+#yleensä 80/20 on hyvä suhde
+library(caTools)
+set.seed(42)
+splitti = sample.split(dataset$xvar, SplitRatio = 0.8) #muuta tarvittaessa!
+treeniosa = subset(datasetti, splitti == TRUE)
+testiosa = subset(datasetti, splitti == FALSE)
+
+#yksinkertainen lineaarinen regressori
+regressori = lm(formula = yvar ~ xvar, data = treeniosa)
+summary(regressori)
+
+y_ennuste = predict(regressori, uusi = testiosa)
+y_ennuste #kurkataan vähän...
+
+#visualisointi ggplot2:lla
+library(ggplot2)
+
+#katsotaan miltä lopputulos näyttää ja kuinka ennuste sopii
+ggplot() +
+  geom_point(aes(x = treeniosa$xvar, y = treenisetti$yvar), colour = 'blue') +
+  geom_point(aes(x = testiosa$xvar, y = testisetti$yvar), colour = 'green') +
+  geom_line(aes(x = treeniosa$xvar, y = predict(regressori, uusi = treeniosa)), colour = 'red') +
+  ggtitle('lineaarinen regressio') + 
+  xlab('x var') +
+  ylab('y var')
