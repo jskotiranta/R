@@ -11,7 +11,7 @@ datasetti = read.csv("data.csv")
 #yleensä 80/20 on hyvä suhde
 library(caTools)
 set.seed(42)
-splitti = sample.split(dataset$xvar, SplitRatio = 0.8) #muuta tarvittaessa!
+splitti = sample.split(datasetti$xvar, SplitRatio = 0.8) #muuta tarvittaessa!
 treeniosa = subset(datasetti, splitti == TRUE)
 testiosa = subset(datasetti, splitti == FALSE)
 
@@ -20,19 +20,21 @@ regressori = lm(formula = yvar ~ xvar, data = treeniosa)
 summary(regressori)
 
 #piste-ennuste
-pe = 6.5
+pe = 6.5 #muuta tarvittavaksi
 y_ennuste = predict(regressori, data.frame(xvar = pe))
 y_ennuste
 
 #visualisointi ggplot2:lla
 library(ggplot2)
 
-#katsotaan miltä lopputulos näyttää ja kuinka ennuste sopii
+#katsotaan miltä lopputulos näyttää ja kuinka ennusteet sopivat
+#xgrid tekee sileämmän käyrän (tässä nyt ei ehkä kovinkaan tarpeellinen...)
+xgrid = seq(min(datasetti$xvar), max(datasetti$xvar), 0.1)
 ggplot() +
   geom_point(aes(x = treeniosa$xvar, y = treeniosa$yvar), colour = 'blue') +
   geom_point(aes(x = testiosa$xvar, y = testiosa$yvar), colour = 'green') +
-  geom_point(aes(x = pe, y = y_ennuste), colour = 'black') +
-  geom_line(aes(x = treeniosa$xvar, y = predict(regressori, newdata = treeniosa)), colour = 'red') +
+  geom_point(aes(x = pe, y = y_ennuste), colour = 'black', shape = 'x', size = 3) +
+  geom_line(aes(x = xgrid, y = predict(regressori, newdata = data.frame(xgrid))), colour = 'red') +
   ggtitle('lineaarinen regressio') + 
   xlab('x var') +
   ylab('y var')
