@@ -15,7 +15,7 @@ datasetti = read.csv("data.csv")
 #yleensä 80/20 on hyvä suhde
 library(caTools)
 set.seed(42)
-splitti = sample.split(datasetti$xvar, SplitRatio = 0.8) #muuta tarvittaessa!
+splitti = sample.split(datasetti, SplitRatio = 0.8) #muuta tarvittaessa!
 treeniosa = subset(datasetti, splitti == TRUE)
 testiosa = subset(datasetti, splitti == FALSE)
 
