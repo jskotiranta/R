@@ -32,7 +32,7 @@ ggplot() +
   geom_point(aes(x = treeniosa$xvar, y = treeniosa$yvar), colour = 'blue') +
   geom_point(aes(x = testiosa$xvar, y = testiosa$yvar), colour = 'green') +
   geom_point(aes(x = pe, y = y_ennuste), colour = 'black') +
-  geom_line(aes(x = treeniosa$xvar, y = predict(regressori, uusi = treeniosa)), colour = 'red') +
+  geom_line(aes(x = treeniosa$xvar, y = predict(regressori, newdata = treeniosa)), colour = 'red') +
   ggtitle('lineaarinen regressio') + 
   xlab('x var') +
   ylab('y var')
