@@ -12,7 +12,8 @@ MH <- function(X0, n_iter){
     tn = exp(posteriori(ehdokas) - posteriori(mc[i,]))
     if (runif(1) < tn){
       mc[i+1,] = ehdokas
-    }else{
+    }
+    else{
       mc[i+1,] = mc[i,]
     }
   }
