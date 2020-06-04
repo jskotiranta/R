@@ -1,0 +1,36 @@
+#Tosi yksinkertainen polynomiregressio, joka
+#käyttää koko datasettiä sovitukseen.
+#Myös piste-ennuste ja visualisointi
+#install.packages('ggplot2') #saattaa olla tarpeen
+
+#luetaan datasetti
+#xvar on riippumaton ja yvar riippuva muuttuja
+datasetti = read.csv("data.csv")
+
+#polynomiregressio
+datasetti$xvar2 = datasetti$xvar^2
+datasetti$xvar3 = datasetti$xvar^3
+datasetti$xvar4 = datasetti$xvar^4
+polyreg = lm(formula = yvar ~., data = datasetti)
+summary(polyreg)
+
+#ennuste
+pe = 6.5 #muuta tarpeen mukaan
+y_ennuste = predict(polyreg, data.frame(xvar = pe, xvar2 = pe^2, xvar3 = pe^3, xvar4 = pe^4))
+y_ennuste
+
+#kuvaaja, xgrid tekee pehmeämmän käyrän
+library(ggplot2)
+xgrid = seq(min(datasetti$xvar), max(datasetti$xvar), 0.1)
+ggplot() +
+  geom_point(aes(x = datasetti$xvar,y = datasetti$yvar), color = 'blue') + 
+  geom_point(aes(x = pe,y = y_ennuste), color = 'green', shape = 'x', size = 3) + 
+  geom_line(aes(x = xgrid, y = predict(polyreg, newdata = data.frame(xvar = xgrid, 
+                                                                     xvar2 = xgrid^2,
+                                                                     xvar3 = xgrid^3,
+                                                                     xvar4 = xgrid^4))), 
+            color = 'red') +
+  ggtitle('regressio') +
+  xlab('x var') +
+  ylab('y var')
+
