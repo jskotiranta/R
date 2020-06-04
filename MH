@@ -1,0 +1,20 @@
+#Metropolis-Hastings algoritmi
+#posteriorijakauma tulee olla log-muodossa
+#pf = proposal-funktio (yl. normaalijakauma)
+#X0=alkuarvovektori ja n_iter=iteraatioiden määrä
+#palauttaa koko Markovin ketjun (mc). Burn-in pitää vähentää erikseen (~10%)
+
+MH <- function(X0, n_iter){
+  mc = array(dim = c(n_iter+1,3))
+  mc[1,] = X0
+  for (i in 1:n_iter){
+    ehdokas = pf(mc[i,]) 
+    tn = exp(posteriori(ehdokas) - posteriori(mc[i,]))
+    if (runif(1) < tn){
+      mc[i+1,] = ehdokas
+    }else{
+      mc[i+1,] = mc[i,]
+    }
+  }
+  return(mc)
+}
