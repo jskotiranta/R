@@ -1,0 +1,26 @@
+#Logistinen luokittelija, joka jakaa datan treeniosaan ja
+#testiosaan, tekee sovituksen treeniosan perusteella 
+#ja vertaa sitten sovituksen onnistumista testiosaan
+
+#xvar on riippumaton muuttuja, yvar riippuva muuttuja
+datasetti = read.csv("data.csv")
+
+#datasetin splittaus kahteen osaan
+#yleensä 80/20 on hyvä suhde
+library(caTools)
+set.seed(42)
+splitti = sample.split(datasetti, SplitRatio = 0.8)
+treenisetti = subset(datasetti, splitti == TRUE)
+testisetti = subset(datasetti, splitti == FALSE)
+
+#tehdään sovitus R:n omalla yleistyllä lineaarisella mallilla
+luokittelija = glm(formula = yvar ~., family = binomial, data = treenisetti)
+ennuste_tn = predict(luokittelija, newdata = testisetti[-ncol(testisetti)]])
+y_ennuste = ifelse(ennuste_tn > 0.5, 1, 0)
+
+#katsotaan miten ennuste onnistui
+#työkaluina confusion matrix ja siitä laskettava tarkkuus
+cm = table(testisetti[,ncol(testisetti)],y_ennuste)
+ac = (cm[1,1] + cm[2,2]) / (cm[1,1] + cm[1,2] + cm[2,1] + cm[2,2])
+cm
+ac
