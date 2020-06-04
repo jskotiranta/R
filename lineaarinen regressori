@@ -1,3 +1,7 @@
+#Tosi yksinkertainen lineaarinen regressio, 
+#jossa sovitus tehdään osasta annettua dataa ja verrataan sitä
+#datan loppuosaan. Myös piste-ennuste ja visualisointi.
+
 #Nämä ei kuulu R:n peruskokoonpanoon
 #caTools vaatii R 3.6.0 tai uudemman
 #install.packages('caTools')
