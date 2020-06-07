@@ -21,6 +21,6 @@ y_ennuste = ifelse(ennuste_tn > 0.5, 1, 0)
 #katsotaan miten ennuste onnistui
 #työkaluina confusion matrix ja siitä laskettava tarkkuus
 cm = table(testisetti[,ncol(testisetti)],y_ennuste)
-ac = (cm[1,1] + cm[2,2]) / (cm[1,1] + cm[1,2] + cm[2,1] + cm[2,2])
+tarkkuus = (cm[1,1] + cm[2,2]) / (cm[1,1] + cm[1,2] + cm[2,1] + cm[2,2])
 cm
-ac
+tarkkuus
