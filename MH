@@ -1,8 +1,14 @@
 #Metropolis-Hastings algoritmi
+#soveltuu periaatteessa minkä tahansa jatkuvan funktion numeeriseen integrointiin
 #posteriorijakauma tulee olla log-muodossa
-#pf = proposal-funktio (yl. normaalijakauma)
 #X0=alkuarvovektori ja n_iter=iteraatioiden määrä
 #palauttaa koko Markovin ketjun (mc). Burn-in pitää vähentää erikseen (~10%)
+
+#proposal-funktio
+#tässä normaalijakauma
+pf <- function(X){
+    return(rnorm(3,mean = X, sd= c(0.3,0.3,0.3)))
+}
 
 MH <- function(X0, n_iter){
   mc = array(dim = c(n_iter+1,3))
@@ -10,7 +16,15 @@ MH <- function(X0, n_iter){
   for (i in 1:n_iter){
     ehdokas = pf(mc[i,]) 
     tn = exp(posteriori(ehdokas) - posteriori(mc[i,]))
-    ifelse (runif(1) < tn, mc[i+1,] = ehdokas, mc[i+1,] = mc[i,])
-  }
+    if (runif(1) < tn){
+            mc[i+1,] = ehdokas
+        }
+	else{
+            mc[i+1,] = mc[i,]
+        }
+    }
   return(mc)
 }
+
+n_mc = 100000 #ketjun pituus, muuta tarvittaessa
+mc = MH(alku, n_mc)
