@@ -10,12 +10,7 @@ MH <- function(X0, n_iter){
   for (i in 1:n_iter){
     ehdokas = pf(mc[i,]) 
     tn = exp(posteriori(ehdokas) - posteriori(mc[i,]))
-    if (runif(1) < tn){
-      mc[i+1,] = ehdokas
-    }
-    else{
-      mc[i+1,] = mc[i,]
-    }
+    ifelse (runif(1) < tn, mc[i+1,] = ehdokas, mc[i+1,] = mc[i,])
   }
   return(mc)
 }
