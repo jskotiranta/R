@@ -1,0 +1,33 @@
+library(deSolve)
+
+alkuarvot <- c(S=5500000, I=1,R=0)
+
+#tartuttavuusparametrit voidaan antaa suoraan
+tartuttavuusaika <- 7 #päivää
+kontaktit <- 4 #hlöä per päivä
+elinaika <- 80*365 #ihmisten keskimääräinen luonnollinen elinaika
+
+#tai vaihtoehtoisesti R0:n avulla
+#elinaika, tartuttavuusaika ja R0 ovat likimain vakioita
+#beta on hyvin vaikea arvioida, siksi se lasketaan R0:sta
+#R0 <- 3.3 
+#beta <- R0*(tartuttavuusaika + 1.0/elinaika)
+
+parametrit <- c(beta=1.0/kontaktit,gamma=1.0/tartuttavuusaika,mu=1.0/elinaika,la=1.0/elinaika)
+aika <- seq(from=0,to=300,by=1)
+
+#itse malli
+#tässä syntyvyyden ja kuolleisuuden huomioiva SIR
+sir_malli <- function(aika, tila, parametrit){
+  with(as.list(c(tila,parametrit)),{
+    N = S + I + R
+    tv = beta*I/N #taudin voima
+    dS = la*N - tv*S - mu*S 
+    dI = tv*S - gamma*I - mu*I
+    dR = gamma*I - mu*R
+    return(list(c(dS, dI, dR)))
+  })
+}
+
+#ratkaistaan malli deSolven funktiolla ode
+output <- as.data.frame(ode(y=alkuarvot, func=sir_malli, parms=parametrit, times=aika))
